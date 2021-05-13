@@ -1,6 +1,9 @@
 #!/bin/bash
 
-export BINDIR=/chia/bin
+LASTCHALLENGE_FILE="/dev/shm/chia_harvester_lastchallenge"
+LASTCHALLENGE_THRESHOLD=30
+BINDIR=/chia/bin
+
 export PLOTSDIR=/chia/plots
 export CADIR=/chia/ca
 export CHIA_HOME=/chia/data
@@ -47,5 +50,27 @@ fi
 
 echo "Starting harvester"
 chia_cmd "start harvester"
+sleep 30
 
-sleep inf
+challenge_received=-1
+while true; do
+  if [[ -f $LASTCHALLENGE_FILE ]]; then
+    last_challenge=$(cat $LASTCHALLENGE_FILE)
+  else
+    last_challenge=0
+  fi
+  curtime=$(date +%s)
+  last_challenge_age=$(($curtime - $last_challenge))
+  if [[ $last_challenge_age -gt $LASTCHALLENGE_THRESHOLD ]]; then
+    if [[ $challenge_received -ne 0 ]]; then
+      echo "Warning: Did not receive a challenge from farmer for at least $LASTCHALLENGE_THRESHOLD seconds"
+    fi
+    challenge_received=0
+  else
+    if [[ $challenge_received -ne 1 ]]; then
+      echo "Info: Receiving challenges from farmer"
+    fi
+    challenge_received=1
+  fi
+  sleep 10
+done

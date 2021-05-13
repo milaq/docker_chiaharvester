@@ -1,0 +1,25 @@
+From a932cb43d4ac201ae0a58e98b87982c8bc059494 Mon Sep 17 00:00:00 2001
+From: milaq <micha.laqua@gmail.com>
+Date: Thu, 13 May 2021 18:42:33 +0200
+Subject: [PATCH] add harvester last challenge timestamp
+
+---
+ chia/harvester/harvester_api.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/chia/harvester/harvester_api.py b/chia/harvester/harvester_api.py
+index 3e9014de..da63cc15 100644
+--- a/chia/harvester/harvester_api.py
++++ b/chia/harvester/harvester_api.py
+@@ -223,6 +223,8 @@ class HarvesterAPI:
+         )
+         pass_msg = make_msg(ProtocolMessageTypes.farming_info, farming_info)
+         await peer.send_message(pass_msg)
++        with open('/dev/shm/chia_harvester_lastchallenge', 'w') as f:
++            f.write(str(int(time.time())))
+         self.harvester.log.info(
+             f"{len(awaitables)} plots were eligible for farming {new_challenge.challenge_hash.hex()[:10]}..."
+             f" Found {total_proofs_found} proofs. Time: {time.time() - start:.5f} s. "
+-- 
+2.31.1
+

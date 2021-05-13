@@ -13,11 +13,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   build-essential curl wget jq tar unzip ca-certificates git openssl lsb-release sudo python3 python3-pip python3-dev python3.8-venv python3.8-distutils python-is-python3 python3-yaml
 
 RUN mkdir /chia
+COPY add-harvester-last-challenge-timestamp.patch /chia/add-harvester-last-challenge-timestamp.patch
 RUN git clone -b $BRANCH $REPO /chia/bin && \
   cd /chia/bin && \
   git submodule update --init mozilla-ca && \
+  git apply /chia/add-harvester-last-challenge-timestamp.patch && \
   chmod +x install.sh && \
   ./install.sh
+RUN cd /chia/bin/
 
 RUN useradd -m -d /chia/data -u 10000 chia
 
