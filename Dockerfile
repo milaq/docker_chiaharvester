@@ -27,6 +27,5 @@ RUN useradd -m -d /chia/data -u 10000 chia
 COPY chia_configure.py /chia/configure.py
 COPY entrypoint.sh /entrypoint.sh
 
-EXPOSE 8448/tcp
 WORKDIR /chia
 ENTRYPOINT ["bash", "/entrypoint.sh"]
