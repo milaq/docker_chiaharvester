@@ -63,7 +63,7 @@ while true; do
   last_challenge_age=$(($curtime - $last_challenge))
   if [[ $last_challenge_age -gt $LASTCHALLENGE_THRESHOLD ]]; then
     if [[ $challenge_received -ne 0 ]]; then
-      echo "[$(date)] Warning: Did not receive a challenge from farmer for at least $LASTCHALLENGE_THRESHOLD seconds"
+      echo "[$(date)] [monitoring] Warning: Did not receive a challenge from farmer for at least $LASTCHALLENGE_THRESHOLD seconds"
     fi
     challenge_received=0
   else

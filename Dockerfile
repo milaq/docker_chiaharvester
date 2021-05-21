@@ -1,10 +1,10 @@
 FROM ubuntu:latest
 
 ARG REPO="https://github.com/Chia-Network/chia-blockchain.git"
-ARG BRANCH="latest"
+ARG VERSION="1.1.6"
 
 LABEL maintainer="milaq <micha.laqua@gmail.com"
-LABEL chia_branch="$BRANCH"
+LABEL chia_version="$VERSION"
 
 ARG DEBIAN_FRONTEND="noninteractive"
 COPY dpkg_excludes /etc/dpkg/dpkg.cfg.d/excludes
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN mkdir /chia
 COPY add-harvester-last-challenge-timestamp.patch /chia/add-harvester-last-challenge-timestamp.patch
-RUN git clone -b $BRANCH $REPO /chia/bin && \
+RUN git clone -b $VERSION $REPO /chia/bin && \
   cd /chia/bin && \
   git submodule update --init mozilla-ca && \
   git apply /chia/add-harvester-last-challenge-timestamp.patch && \
