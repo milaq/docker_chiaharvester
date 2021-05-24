@@ -54,16 +54,15 @@ sleep 30
 
 challenge_received=-1
 while true; do
-  if [[ -f $LASTCHALLENGE_FILE ]]; then
-    last_challenge=$(cat $LASTCHALLENGE_FILE)
-  else
+  last_challenge=$(cat $LASTCHALLENGE_FILE 2> /dev/null)
+  if [[ ! $last_challenge =~ ^[0-9]+$ ]]; then
     last_challenge=0
   fi
   curtime=$(date +%s)
   last_challenge_age=$(($curtime - $last_challenge))
   if [[ $last_challenge_age -gt $LASTCHALLENGE_THRESHOLD ]]; then
     if [[ $challenge_received -ne 0 ]]; then
-      echo "[$(date)] [monitoring] Warning: Did not receive a challenge from farmer for at least $LASTCHALLENGE_THRESHOLD seconds"
+      echo "[$(date)] [monitoring] Did not receive a challenge from farmer for at least $LASTCHALLENGE_THRESHOLD seconds"
     fi
     challenge_received=0
   else
