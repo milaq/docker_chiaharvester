@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 ARG REPO="https://github.com/Chia-Network/chia-blockchain.git"
-ARG VERSION="1.1.6"
+ARG VERSION="1.2.3"
 
 LABEL maintainer="milaq <micha.laqua@gmail.com"
 LABEL chia_version="$VERSION"
